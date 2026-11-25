@@ -1,0 +1,17 @@
+{
+  "appId": "com.wasel.call",
+  "appName": "مكالمات واصل",
+  "webDir": "src/renderer",
+  "loggingBehavior": "debug",
+  "android": {
+    "allowMixedContent": true
+  },
+  "plugins": {
+    "WaselDiscovery": {
+      "placeholder": true,
+      "enabled": true,
+      "port": 7788,
+      "note": "Config placeholder for the custom native UDP discovery plugin. The WebView has no UDP sockets; the native plugin supplies Wi-Fi/IP information."
+    }
+  }
+}
