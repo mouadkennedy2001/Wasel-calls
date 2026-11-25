@@ -1,7 +1,8 @@
 /* واصل كولز — منطق الموقع الثابت
+   - ثنائي اللغة (عربي/إنجليزي) مع اتجاه RTL/LTR وخطوط محلية
    - جلب أحدث إصدار مستقر وإحصائيات المستودع من GitHub API
    - بيانات احتياطية + تخزين مؤقت للعمل دون اتصال
-   - مظهر GNOME (داكن/فاتح/تلقائي)، تنقّل، عدّادات، نسخ البصمة */
+   - مظهر GNOME، تنقّل، عدّادات، بحث في الإصدارات، نسخ البصمة */
 (() => {
   'use strict';
 
@@ -9,6 +10,7 @@
   const API = 'https://api.github.com';
   const RELEASES_URL = `https://github.com/${REPO}/releases`;
   const CACHE_KEY = 'wasel:github-cache';
+  const LANG_KEY = 'wasel:lang';
   const CACHE_TTL = 10 * 60 * 1000;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -16,40 +18,94 @@
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const icon = (name, cls = 'icon') => `<svg class="${cls}" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
 
-  const nf = new Intl.NumberFormat('ar-u-nu-latn');
-  const df = new Intl.DateTimeFormat('ar-u-nu-latn', { day: 'numeric', month: 'long', year: 'numeric' });
-
-  // بيانات احتياطية من وقت النشر، تظهر فقط إن تعذّر الوصول إلى GitHub.
-  const FALLBACK = {
-    repo: { stargazers_count: 0, forks_count: 0, subscribers_count: 0, html_url: `https://github.com/${REPO}` },
-    releases: [{
-      tag_name: 'v1.0.0',
-      name: 'v1.0.0',
-      draft: false,
-      prerelease: false,
-      published_at: '2026-11-25T20:30:05Z',
-      body: '1st version',
-      html_url: 'https://github.com/mouadkennedy2001/Wasel-calls/releases/tag/v1.0.0',
-      assets: [{
-        name: 'Wasel-calls.apk',
-        size: 3978630,
-        download_count: 0,
-        digest: 'sha256:fc392ede78d9aa56db855eb758e6e01fc918ddb09b6f6b0c273b49fc8d08fb53',
-        browser_download_url: 'https://github.com/mouadkennedy2001/Wasel-calls/releases/download/v1.0.0/Wasel-calls.apk'
-      }]
-    }]
+  const I18N = {
+    ar: {
+      title: 'واصل كولز | مكالمات ومحادثات على شبكتك المحلية',
+      description: 'واصل كولز — محادثة ومكالمات صوتية ومشاركة ملفات على الشبكة المحلية، بواجهة GNOME/Adwaita عصرية. حمّل أحدث إصدار مستقر.',
+      ogLocale: 'ar_AR',
+      syncLoading: 'جارٍ مزامنة الإصدارات…',
+      syncLive: 'تم التحديث تلقائياً من GitHub الآن',
+      syncCached: 'آخر تحديث من GitHub محفوظ محلياً',
+      syncStale: 'تعذّر الاتصال بـ GitHub — عرض بيانات مخزّنة',
+      syncFallback: 'عرض بيانات احتياطية — GitHub غير متاح حالياً',
+      latestStable: 'أحدث مستقر',
+      releasePage: 'صفحة التحميل',
+      noNotes: 'لا توجد ملاحظات مُرفقة بهذا الإصدار.',
+      noAssets: 'لا توجد ملفات قابلة للتحميل في هذا الإصدار؛ افتح صفحة الإصدار على GitHub.',
+      downloads: 'تحميل',
+      copyLink: 'رابط',
+      preRelease: 'تجريبي',
+      downloadApk: 'تنزيل APK',
+      downloadRelease: 'تنزيل الإصدار',
+      noSearch: 'لا توجد إصدارات مطابقة لبحثك.',
+      copied: 'تم النسخ: ',
+      copyFail: 'تعذّر النسخ، انسخ النص يدوياً',
+      starsOnGithub: (n) => `${n} نجمة على GitHub — افتح المستودع`,
+      theme: { system: 'تلقائي', dark: 'داكن', light: 'فاتح' },
+      languageToast: 'اللغة: العربية',
+      backToTop: 'العودة إلى الأعلى'
+    },
+    en: {
+      title: 'Wasel Calls | Local-first chat and voice calls',
+      description: 'Wasel Calls — local chat, voice calls and file sharing with a modern GNOME/Adwaita interface. Download the latest stable release.',
+      ogLocale: 'en_US',
+      syncLoading: 'Syncing releases…',
+      syncLive: 'Synced from GitHub just now',
+      syncCached: 'Last GitHub update saved locally',
+      syncStale: 'GitHub unreachable — showing cached data',
+      syncFallback: 'Showing built-in fallback — GitHub is unavailable',
+      latestStable: 'Latest stable',
+      releasePage: 'Open release page',
+      noNotes: 'No notes attached to this release.',
+      noAssets: 'No downloadable assets in this release; open it on GitHub.',
+      downloads: 'downloads',
+      copyLink: 'Link',
+      preRelease: 'Pre-release',
+      downloadApk: 'Download APK',
+      downloadRelease: 'Download release',
+      noSearch: 'No releases match your search.',
+      copied: 'Copied: ',
+      copyFail: 'Copy failed — select the text manually',
+      starsOnGithub: (n) => `${n} stars on GitHub — open the repository`,
+      theme: { system: 'Automatic', dark: 'Dark', light: 'Light' },
+      languageToast: 'Language: English',
+      backToTop: 'Back to top'
+    }
   };
 
+  let currentLang = 'ar';
+  let nf = new Intl.NumberFormat('ar-u-nu-latn');
+  let df = new Intl.DateTimeFormat('ar-u-nu-latn', { day: 'numeric', month: 'long', year: 'numeric' });
+  let rtf = makeRelativeFormatter('ar');
+
+  function makeRelativeFormatter(lang) {
+    try {
+      return new Intl.RelativeTimeFormat(lang === 'ar' ? 'ar-u-nu-latn' : 'en', { numeric: 'auto', style: 'short' });
+    } catch { return null; }
+  }
+
+  const t = (key) => I18N[currentLang][key] ?? key;
   const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[c]));
-
   const safeUrl = (url) => (/^https:\/\/github\.com\//i.test(String(url || '')) ? String(url) : RELEASES_URL);
+  const safeAssetUrl = (asset) => /^https:\/\/github\.com\//i.test(String(asset?.browser_download_url || ''));
 
   const formatDate = (value) => {
     const date = new Date(value);
     return Number.isNaN(date.getTime()) ? '—' : df.format(date);
   };
+
+  function relativeTime(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime()) || !rtf) return '';
+    const seconds = (date.getTime() - Date.now()) / 1000;
+    const units = [['year', 31536000], ['month', 2592000], ['week', 604800], ['day', 86400], ['hour', 3600], ['minute', 60]];
+    for (const [unit, size] of units) {
+      if (Math.abs(seconds) >= size) return rtf.format(Math.round(seconds / size), unit);
+    }
+    return rtf.format(0, 'minute');
+  }
 
   const formatBytes = (bytes) => {
     if (!Number.isFinite(Number(bytes)) || Number(bytes) <= 0) return '—';
@@ -72,12 +128,105 @@
     return 0;
   };
 
-  function setSync(message, state = 'ok') {
-    const note = $('#sync-note');
-    if (!note) return;
-    const dot = $('.pulse-dot', note);
-    if (dot) dot.style.background = state === 'warn' ? 'var(--warning)' : '';
-    note.lastChild.nodeValue = ` ${message}`;
+  /* --------------------------------------------------------- الترجمة */
+
+  const staticNodes = [];
+
+  function collectStaticNodes() {
+    $$('[data-en], [data-en-html], [data-en-aria], [data-en-title], [data-en-placeholder]').forEach((node) => {
+      if (node.hasAttribute('data-en') && !node.dataset.ar) node.dataset.ar = node.textContent;
+      if (node.hasAttribute('data-en-html') && !node.dataset.arHtml) node.dataset.arHtml = node.innerHTML;
+      if (node.hasAttribute('data-en-aria') && !node.dataset.arAria) node.dataset.arAria = node.getAttribute('aria-label') || '';
+      if (node.hasAttribute('data-en-title') && !node.dataset.arTitle) node.dataset.arTitle = node.getAttribute('title') || '';
+      if (node.hasAttribute('data-en-placeholder') && !node.dataset.arPlaceholder) node.dataset.arPlaceholder = node.getAttribute('placeholder') || '';
+      staticNodes.push(node);
+    });
+  }
+
+  function applyStaticLanguage() {
+    const en = currentLang === 'en';
+    staticNodes.forEach((node) => {
+      if (node.hasAttribute('data-en')) node.textContent = en ? node.dataset.en : node.dataset.ar;
+      if (node.hasAttribute('data-en-html')) node.innerHTML = en ? node.dataset.enHtml : node.dataset.arHtml;
+      if (node.hasAttribute('data-en-aria')) node.setAttribute('aria-label', en ? node.dataset.enAria : node.dataset.arAria);
+      if (node.hasAttribute('data-en-title')) node.setAttribute('title', en ? node.dataset.enTitle : node.dataset.arTitle);
+      if (node.hasAttribute('data-en-placeholder')) node.setAttribute('placeholder', en ? node.dataset.enPlaceholder : node.dataset.arPlaceholder);
+    });
+
+    $$('[data-lang]').forEach((button) => {
+      const active = button.dataset.lang === currentLang;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+
+    window.dispatchEvent(new Event('wasel:langchange'));
+  }
+
+  // يحدّث نصاً كان ثابتاً في HTML وأصبح ديناميكياً من GitHub.
+  function setTranslated(node, ar, en) {
+    if (!node) return;
+    if (node.hasAttribute('data-en')) {
+      node.dataset.ar = ar;
+      node.dataset.en = en;
+    }
+    node.textContent = currentLang === 'ar' ? ar : en;
+  }
+
+  function refreshStatFormats() {
+    $$('#stat-stars, #stat-downloads, #stat-releases, #stat-platforms').forEach((node) => {
+      if (node?.dataset.value) node.textContent = nf.format(Number(node.dataset.value));
+    });
+  }
+
+  let currentData = null;
+  let currentReleases = [];
+  let currentLatest = null;
+  let releaseQuery = '';
+  let lastSync = null;
+
+  function setLang(lang, persist = true) {
+    if (!I18N[lang]) return;
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    nf = new Intl.NumberFormat(lang === 'ar' ? 'ar-u-nu-latn' : 'en-US');
+    df = new Intl.DateTimeFormat(lang === 'ar' ? 'ar-u-nu-latn' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    rtf = makeRelativeFormatter(lang);
+
+    applyStaticLanguage();
+    document.title = t('title');
+    $('meta[name="description"]')?.setAttribute('content', t('description'));
+    $('meta[property="og:locale"]')?.setAttribute('content', t('ogLocale'));
+    $('#to-top')?.setAttribute('aria-label', t('backToTop'));
+
+    if (persist) {
+      try { localStorage.setItem(LANG_KEY, lang); } catch { /* تخزين غير متاح */ }
+    }
+
+    if (currentData) {
+      renderLatest(currentLatest);
+      renderOlder(currentReleases, currentLatest, releaseQuery);
+      refreshStatFormats();
+      const starCount = $('#star-count');
+      if (starCount) starCount.textContent = nf.format(Number(currentData.repo?.stargazers_count) || 0);
+      $('#star-link')?.setAttribute('aria-label', t('starsOnGithub')(nf.format(Number(currentData.repo?.stargazers_count) || 0)));
+    }
+    if (lastSync) setSync(lastSync.key, lastSync.state);
+  }
+
+  function initI18n() {
+    collectStaticNodes();
+    let stored = null;
+    try { stored = localStorage.getItem(LANG_KEY); } catch { /* تجاهل */ }
+    setLang(stored === 'en' ? 'en' : 'ar', false);
+
+    $$('[data-lang]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (button.dataset.lang === currentLang) return;
+        setLang(button.dataset.lang);
+        showToast(t('languageToast'));
+      });
+    });
   }
 
   /* ------------------------------------------------------------ المظهر */
@@ -94,23 +243,23 @@
     function apply() {
       const resolved = pref === 'system' ? (media.matches ? 'light' : 'dark') : pref;
       document.documentElement.dataset.theme = resolved;
-      document.documentElement.dataset.themePref = pref;
       const iconName = pref === 'system' ? 'auto' : pref === 'dark' ? 'moon' : 'sun';
-      const label = { system: 'تلقائي', dark: 'داكن', light: 'فاتح' }[pref];
+      const label = I18N[currentLang].theme[pref];
       use?.setAttribute('href', `#i-${iconName}`);
-      button?.setAttribute('title', `المظهر: ${label} (اضغط للتبديل)`);
-      button?.setAttribute('aria-label', `المظهر الحالي: ${label}`);
+      button?.setAttribute('title', `${currentLang === 'ar' ? 'المظهر' : 'Appearance'}: ${label}`);
+      button?.setAttribute('aria-label', `${currentLang === 'ar' ? 'المظهر الحالي' : 'Current appearance'}: ${label}`);
       $('meta[name="theme-color"]')?.setAttribute('content', resolved === 'dark' ? '#1d1d1f' : '#f6f5f4');
     }
 
     button?.addEventListener('click', () => {
       pref = { system: 'dark', dark: 'light', light: 'system' }[pref];
-      try { localStorage.setItem('wasel-theme', pref); } catch { /* تخزين غير متاح */ }
+      try { localStorage.setItem('wasel-theme', pref); } catch { /* تجاهل */ }
       apply();
-      showToast(`المظهر: ${{ system: 'تلقائي', dark: 'داكن', light: 'فاتح' }[pref]}`);
+      showToast(`${currentLang === 'ar' ? 'المظهر' : 'Appearance'}: ${I18N[currentLang].theme[pref]}`);
     });
 
     media.addEventListener?.('change', () => { if (pref === 'system') apply(); });
+    window.addEventListener('wasel:langchange', apply);
     apply();
   }
 
@@ -154,12 +303,14 @@
 
   function initScrollEffects() {
     const progress = $('#scroll-progress');
+    const toTop = $('#to-top');
     let ticking = false;
 
     function update() {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const ratio = max > 0 ? Math.min(1, window.scrollY / max) : 0;
       if (progress) progress.style.width = `${ratio * 100}%`;
+      toTop?.classList.toggle('is-visible', window.scrollY > 600);
       ticking = false;
     }
 
@@ -167,6 +318,10 @@
       if (!ticking) { ticking = true; requestAnimationFrame(update); }
     }, { passive: true });
     update();
+
+    toTop?.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
 
     const items = $$('.reveal');
     if (reduceMotion || !('IntersectionObserver' in window)) {
@@ -219,10 +374,10 @@
       if (!button) return;
       const value = button.dataset.copy || '';
       const ok = await copyText(value);
-      if (!ok) { showToast('تعذّر النسخ، انسخ النص يدوياً'); return; }
-      showToast(`تم النسخ: ${value.length > 34 ? `${value.slice(0, 34)}…` : value}`);
+      if (!ok) { showToast(t('copyFail')); return; }
+      showToast(`${t('copied')}${value.length > 34 ? `${value.slice(0, 34)}…` : value}`);
       const original = button.innerHTML;
-      button.innerHTML = `${icon('check')} تم`;
+      button.innerHTML = `${icon('check')} ${currentLang === 'ar' ? 'تم' : 'Done'}`;
       button.style.color = 'var(--success)';
       setTimeout(() => { button.innerHTML = original; button.style.color = ''; }, 1600);
     });
@@ -267,20 +422,25 @@
   }
 
   function bestAsset(release) {
-    const assets = (release?.assets || []).filter((asset) => safeAssetUrl(asset));
+    const assets = (release?.assets || []).filter(safeAssetUrl);
     return assets.find((asset) => /\.apk$/i.test(asset.name || ''))
       || assets.find((asset) => /apk/i.test(asset.name || ''))
       || assets[0]
       || null;
   }
 
-  function safeAssetUrl(asset) {
-    return /^https:\/\/github\.com\//i.test(String(asset?.browser_download_url || ''));
-  }
-
   function digestHex(asset) {
     const match = String(asset?.digest || '').match(/^sha256:([a-f0-9]{64})$/i);
     return match ? match[1] : '';
+  }
+
+  function setSync(key, state = 'ok') {
+    lastSync = { key, state };
+    const note = $('#sync-note');
+    if (!note) return;
+    const dot = $('.pulse-dot', note);
+    if (dot) dot.style.background = state === 'warn' ? 'var(--warning)' : '';
+    note.lastChild.nodeValue = ` ${t(key)}`;
   }
 
   function assetRow(asset) {
@@ -290,20 +450,21 @@
     const count = nf.format(Number(asset.download_count) || 0);
     return `
       <div class="asset-row">
-        <span class="asset-row__icon">${icon(/$apk$/i.test(asset.name || '') ? 'android' : 'download')}</span>
+        <span class="asset-row__icon">${icon(/\.apk$/i.test(asset.name || '') ? 'android' : 'download')}</span>
         <span class="asset-row__name">
-          <b>${esc(asset.name || 'ملف')}</b>
-          <small>${esc(formatBytes(asset.size))} · ${count} تحميل${hash ? ` · SHA256: ${esc(shortHash)}` : ''}</small>
+          <b>${esc(asset.name || 'file')}</b>
+          <small>${esc(formatBytes(asset.size))} · ${count} ${esc(t('downloads'))}${hash ? ` · SHA256: ${esc(shortHash)}` : ''}</small>
         </span>
         ${hash ? `<button type="button" class="copy-btn" data-copy="${esc(hash)}" title="${esc(hash)}">${icon('copy')} SHA256</button>` : ''}
-        <a class="icon-btn icon-btn--link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="تنزيل ${esc(asset.name || 'الملف')}">${icon('download')}</a>
+        <button type="button" class="copy-btn copy-btn--icon" data-copy="${esc(url)}" aria-label="${esc(t('copyLink'))}" title="${esc(t('copyLink'))}">${icon('copy')}</button>
+        <a class="icon-btn icon-btn--link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(currentLang === 'ar' ? 'تنزيل' : 'Download')} ${esc(asset.name || 'file')}">${icon('download')}</a>
       </div>`;
   }
 
   function renderLatest(release) {
     const container = $('#latest-release');
     if (!container) return;
-    const notes = String(release?.body || '').trim() || 'لا توجد ملاحظات مُرفقة بهذا الإصدار.';
+    const notes = String(release?.body || '').trim() || t('noNotes');
     const date = formatDate(release?.published_at);
     const version = esc(release?.tag_name || '—');
     const assets = (release?.assets || []).filter(safeAssetUrl);
@@ -311,61 +472,70 @@
     container.innerHTML = `
       <div class="release-card__head">
         <div>
-          <span class="pill pill--success">${icon('check')} أحدث مستقر</span>
+          <span class="pill pill--success">${icon('check')} ${esc(t('latestStable'))}</span>
           <h3>${version} <small>— ${esc(date)}</small></h3>
+          <span class="release-card__age" id="release-age">${esc(relativeTime(release?.published_at))}</span>
         </div>
-        <a class="btn btn--primary" href="${esc(safeUrl(release?.html_url))}" target="_blank" rel="noopener noreferrer">${icon('download')} صفحة التحميل</a>
+        <a class="btn btn--primary" href="${esc(safeUrl(release?.html_url))}" target="_blank" rel="noopener noreferrer">${icon('download')} ${esc(t('releasePage'))}</a>
       </div>
       <p class="release-card__notes">${esc(notes)}</p>
-      <div class="asset-list">${assets.length ? assets.map(assetRow).join('') : `<p class="notice">لا توجد ملفات قابلة للتحميل في هذا الإصدار؛ افتح صفحة الإصدار على GitHub.</p>`}</div>`;
+      <div class="asset-list">${assets.length ? assets.map(assetRow).join('') : `<p class="notice">${esc(t('noAssets'))}</p>`}</div>`;
 
     const apk = bestAsset(release);
     const cta = $('#download-cta');
-    if (cta && apk) cta.href = safeUrl(apk.browser_download_url);
-    else if (cta) cta.href = safeUrl(release?.html_url);
-    const label = $('#download-label');
-    if (label) label.textContent = `تنزيل ${apk ? 'APK' : 'الإصدار'} — ${release?.tag_name || 'الأحدث'}`;
-    const pill = $('#version-pill');
-    if (pill) pill.innerHTML = `${icon('check')} أحدث مستقر: ${version}`;
+    if (cta) cta.href = safeUrl(apk ? apk.browser_download_url : release?.html_url);
+    const versionLabel = String(release?.tag_name || '').trim();
+    setTranslated($('#download-label'),
+      `${I18N.ar.downloadApk}${versionLabel ? ` — ${versionLabel}` : ''}`,
+      `${I18N.en.downloadApk}${versionLabel ? ` — ${versionLabel}` : ''}`);
+    const pillText = `${t('latestStable')}: ${release?.tag_name || '—'}`;
+    setTranslated($('#version-pill span'), pillText, `${I18N.en.latestStable}: ${release?.tag_name || '—'}`);
     const releaseDate = $('#release-date');
     if (releaseDate) releaseDate.textContent = date;
   }
 
-  function renderOlder(releases, latest) {
+  function renderOlder(releases, latest, query = '') {
     const details = $('#older-releases');
     const list = $('#older-list');
     if (!details || !list) return;
 
+    const normalized = query.trim().toLowerCase();
     const items = (releases || [])
       .filter((release) => release && release !== latest)
+      .filter((release) => {
+        if (!normalized) return true;
+        const haystack = [release.tag_name, release.name, release.body,
+          ...(release.assets || []).map((asset) => asset.name)].join(' ').toLowerCase();
+        return haystack.includes(normalized);
+      })
       .sort((a, b) => Date.parse(b.published_at || 0) - Date.parse(a.published_at || 0)
         || compareVersions(a.tag_name, b.tag_name));
 
     $('#older-count').textContent = nf.format(items.length);
-    details.hidden = items.length === 0;
-    list.innerHTML = items.map((release) => {
+    details.hidden = items.length === 0 && !normalized;
+    list.innerHTML = items.length ? items.map((release) => {
       const assets = (release?.assets || []).filter(safeAssetUrl);
       const note = String(release?.body || '').trim().split('\n')[0].slice(0, 160);
       return `
         <article class="mini-release">
           <div class="mini-release__head">
-            <b>${esc(release.tag_name || 'بدون اسم')}</b>
-            ${release.prerelease ? '<span class="badge-prerelease">تجريبي</span>' : ''}
+            <b>${esc(release.tag_name || '—')}</b>
+            ${release.prerelease ? `<span class="badge-prerelease">${esc(t('preRelease'))}</span>` : ''}
             <span>${esc(formatDate(release.published_at))}${note ? ` · ${esc(note)}` : ''}</span>
           </div>
           ${assets.length ? `<div class="mini-release__assets">${assets.map((asset) => `
-            <a href="${esc(safeUrl(asset.browser_download_url))}" target="_blank" rel="noopener noreferrer">${icon('download')} ${esc(asset.name || 'ملف')} · ${esc(formatBytes(asset.size))}</a>`).join('')}</div>` : ''}
+            <a href="${esc(safeUrl(asset.browser_download_url))}" target="_blank" rel="noopener noreferrer">${icon('download')} ${esc(asset.name || 'file')} · ${esc(formatBytes(asset.size))}</a>`).join('')}</div>` : ''}
         </article>`;
-    }).join('');
+    }).join('') : `<p class="notice">${esc(t('noSearch'))}</p>`;
   }
 
   let statsDone = false;
   function animateStats(targets) {
-    const nodes = [['#stat-stars', targets.stars], ['#stat-downloads', targets.downloads], ['#stat-releases', targets.releases]];
-    nodes.forEach(([selector, value]) => {
+    [['#stat-stars', targets.stars], ['#stat-downloads', targets.downloads], ['#stat-releases', targets.releases]].forEach(([selector, value]) => {
       const node = $(selector);
       if (!node) return;
       const target = Number(value) || 0;
+      node.dataset.value = String(target);
       if (statsDone || reduceMotion) { node.textContent = nf.format(target); return; }
       const duration = 950;
       const start = performance.now();
@@ -381,12 +551,13 @@
   }
 
   function applyData(data) {
-    const releases = Array.isArray(data.releases) ? data.releases : [];
+    currentData = data;
+    currentReleases = Array.isArray(data.releases) ? data.releases : [];
+    currentLatest = selectStable(currentReleases) || FALLBACK.releases[0];
     const repo = data.repo || FALLBACK.repo;
-    const latest = selectStable(releases) || FALLBACK.releases[0];
 
-    renderLatest(latest);
-    renderOlder(releases, latest);
+    renderLatest(currentLatest);
+    renderOlder(currentReleases, currentLatest, releaseQuery);
 
     const stars = Number(repo.stargazers_count) || 0;
     const starCount = $('#star-count');
@@ -394,35 +565,52 @@
     const starLink = $('#star-link');
     if (starLink) {
       starLink.href = safeUrl(repo.html_url || `https://github.com/${REPO}`);
-      starLink.setAttribute('aria-label', `${nf.format(stars)} نجمة على GitHub — افتح المستودع`);
+      starLink.setAttribute('aria-label', t('starsOnGithub')(nf.format(stars)));
     }
 
-    const downloads = releases.reduce((total, release) => total
+    const downloads = currentReleases.reduce((total, release) => total
       + (release?.assets || []).reduce((sum, asset) => sum + (Number(asset.download_count) || 0), 0), 0);
 
     const statsSection = $('.stats');
+    const values = { stars, downloads, releases: Math.max(currentReleases.length, 1) };
     if (statsSection && 'IntersectionObserver' in window && !statsDone) {
       const observer = new IntersectionObserver((entries) => {
         if (entries.some((entry) => entry.isIntersecting)) {
-          animateStats({ stars, downloads, releases: Math.max(selectStable(releases) ? releases.length : 1, 1) });
+          animateStats(values);
           observer.disconnect();
         }
       }, { threshold: 0.2 });
       observer.observe(statsSection);
     } else {
-      animateStats({ stars, downloads, releases: Math.max(releases.length, 1) });
-    }
-
-    if (repo.description && $('meta[name="description"]')) {
-      // الوصف الثابت في HTML مكتوب بعناية، لا يُستبدل تلقائياً.
+      animateStats(values);
     }
   }
+
+  const FALLBACK = {
+    repo: { stargazers_count: 0, forks_count: 0, subscribers_count: 0, html_url: `https://github.com/${REPO}` },
+    releases: [{
+      tag_name: 'v1.0.0',
+      name: 'v1.0.0',
+      draft: false,
+      prerelease: false,
+      published_at: '2026-11-25T20:30:05Z',
+      body: '1st version',
+      html_url: 'https://github.com/mouadkennedy2001/Wasel-calls/releases/tag/v1.0.0',
+      assets: [{
+        name: 'Wasel-calls.apk',
+        size: 3978630,
+        download_count: 0,
+        digest: 'sha256:fc392ede78d9aa56db855eb758e6e01fc918ddb09b6f6b0c273b49fc8d08fb53',
+        browser_download_url: 'https://github.com/mouadkennedy2001/Wasel-calls/releases/download/v1.0.0/Wasel-calls.apk'
+      }]
+    }]
+  };
 
   async function loadGithubData() {
     const cached = readCache();
     if (cached) {
       applyData(cached);
-      setSync(cached.live === false ? 'بيانات مخزّنة مؤقتاً' : 'آخر تحديث من GitHub محفوظ محلياً');
+      setSync(cached.live === false ? 'syncStale' : 'syncCached');
     }
 
     try {
@@ -430,17 +618,16 @@
         fetchJson(`/repos/${REPO}`),
         fetchJson(`/repos/${REPO}/releases?per_page=100`)
       ]);
-      if (!Array.isArray(releases)) throw new Error('صيغة غير متوقعة');
+      if (!Array.isArray(releases)) throw new Error('Unexpected payload');
       const data = { repo, releases, fetchedAt: Date.now(), live: true };
       writeCache(data);
       applyData(data);
-      setSync('تم التحديث تلقائياً من GitHub الآن');
+      setSync('syncLive');
     } catch (error) {
-      if (cached) {
-        setSync('تعذّر الاتصال بـ GitHub — عرض بيانات مخزّنة', 'warn');
-      } else {
+      if (cached) setSync('syncStale', 'warn');
+      else {
         applyData({ repo: FALLBACK.repo, releases: FALLBACK.releases, live: false });
-        setSync('عرض بيانات احتياطية — GitHub غير متاح حالياً', 'warn');
+        setSync('syncFallback', 'warn');
       }
       console.warn('Wasel site: GitHub data unavailable:', error?.message || error);
     }
@@ -448,9 +635,17 @@
 
   /* -------------------------------------------------------------- بدء */
 
+  initI18n();
+  setSync('syncLoading');
   initTheme();
   initNavigation();
   initScrollEffects();
   initCopy();
+
+  $('#release-filter')?.addEventListener('input', (event) => {
+    releaseQuery = event.target.value || '';
+    if (currentReleases.length) renderOlder(currentReleases, currentLatest, releaseQuery);
+  });
+
   loadGithubData();
 })();

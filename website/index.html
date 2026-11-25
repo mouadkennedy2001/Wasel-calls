@@ -1,22 +1,48 @@
 <!doctype html>
-<html lang="ar" dir="rtl" data-theme="dark" data-theme-pref="system">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="واصل كولز — محادثة ومكالمات صوتية ومشاركة ملفات على الشبكة المحلية، بواجهة GNOME/Adwaita عصرية. حمّل أحدث إصدار مستقر.">
-  <meta name="theme-color" content="#1d1d1f">
-  <meta property="og:title" content="واصل كولز — تواصل بلا إنترنت">
-  <meta property="og:description" content="مكالمات صوتية ومحادثات وملفات على شبكتك المحلية. واجهة GNOME حديثة، وتحديثات تلقائية من GitHub.">
+  <meta name="theme-color" content="#3584e4">
+  <meta property="og:title" content="Wasel Calls — Talk beyond the internet">
+  <meta property="og:description" content="Local-first chat, voice calls and file sharing with a modern GNOME-inspired interface.">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="ar_AR">
+  <meta property="og:image" content="https://raw.githubusercontent.com/mouadkennedy2001/Wasel-calls/main/website/icon.svg">
+  <link rel="canonical" href="https://mouadkennedy2001.github.io/Wasel-calls/">
   <title>واصل كولز | مكالمات ومحادثات على شبكتك المحلية</title>
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <link rel="preload" href="assets/fonts/ibm-plex-sans-arabic-400-arabic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/style.css">
   <script src="assets/js/app.js" defer></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Wasel Calls",
+    "alternateName": "مكالمات واصل",
+    "applicationCategory": "CommunicationApplication",
+    "operatingSystem": "Android 7+, Windows, macOS, Linux, Any modern browser",
+    "softwareVersion": "1.0.0",
+    "author": { "@type": "Person", "name": "zerouki ahmed mouad", "alternateName": "زروقي أحمد معاذ" },
+    "downloadUrl": "https://github.com/mouadkennedy2001/Wasel-calls/releases/latest",
+    "codeRepository": "https://github.com/mouadkennedy2001/Wasel-calls",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
 </head>
 <body id="top">
-  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+  <a class="skip-link" href="#main" data-en="Skip to content">تخطَّ إلى المحتوى</a>
 
-  <!-- مكتبة أيقونات SVGمدمجة: لا يوجد أي اعتماد على خدمات خارجية -->
+  <!-- مكتبة أيقونات SVG مدمجة -->
   <svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <symbol id="i-wasel" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 8-8"/><path d="M4 17a13 13 0 0 1 13-13"/><circle cx="5" cy="19" r="2" fill="currentColor" stroke="none"/><path d="M14 10.5 20 7v10l-6-3.5z"/></symbol>
     <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 15a3 3 0 0 1-3 3H9l-5 3v-6a3 3 0 0 1-1-2.2V7a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3z"/><path d="M8 9h8M8 12.5h5"/></symbol>
@@ -38,6 +64,7 @@
     <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 18v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5m0 0-6 6m6-6 6 6"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
@@ -46,32 +73,38 @@
     <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5zM3 12l9 5 9-5M3 16l9 5 9-5"/></symbol>
     <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-8-5-8-10a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5-8 10-8 10z"/></symbol>
     <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
   </svg>
 
   <header class="topbar" id="topbar">
     <div class="topbar__inner shell">
-      <a class="brand" href="#top" aria-label="واصل كولز — الصفحة الرئيسية">
-        <span class="brand__mark"><svg class="icon"><use href="#i-wasel"></use></svg></span>
+      <a class="brand" href="#top" data-en-aria="Wasel Calls — home" aria-label="واصل كولز — الصفحة الرئيسية">
+        <img class="brand__logo" src="icon.svg" alt="">
         <span class="brand__text">واصل <span>Calls</span></span>
       </a>
 
-      <nav class="nav" id="primary-nav" aria-label="التنقل الرئيسي">
-        <a href="#features" class="nav__link">المميزات</a>
-        <a href="#platforms" class="nav__link">المنصات</a>
-        <a href="#releases" class="nav__link">الإصدارات</a>
-        <a href="#guide" class="nav__link">طريقة الاستخدام</a>
-        <a href="#faq" class="nav__link">الأسئلة</a>
+      <nav class="nav" id="primary-nav" data-en-aria="Main navigation" aria-label="التنقل الرئيسي">
+        <a href="#features" class="nav__link" data-en="Features">المميزات</a>
+        <a href="#platforms" class="nav__link" data-en="Platforms">المنصات</a>
+        <a href="#releases" class="nav__link" data-en="Releases">الإصدارات</a>
+        <a href="#guide" class="nav__link" data-en="Quick start">طريقة الاستخدام</a>
+        <a href="#faq" class="nav__link" data-en="FAQ">الأسئلة</a>
       </nav>
 
       <div class="topbar__actions">
-        <button type="button" class="icon-btn" id="theme-toggle" aria-label="تبديل المظهر" title="المظهر: تلقائي">
+        <div class="lang-switch" role="group" data-en-aria="Language" aria-label="اللغة">
+          <button type="button" class="lang-btn is-active" data-lang="ar" aria-pressed="true">AR</button>
+          <span class="lang-divider" aria-hidden="true"></span>
+          <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <button type="button" class="icon-btn" id="theme-toggle" data-en-title="Appearance: automatic (click to change)" title="المظهر: تلقائي" aria-label="تبديل المظهر">
           <svg class="icon theme-icon"><use href="#i-auto"></use></svg>
         </button>
         <a class="star-btn" id="star-link" href="https://github.com/mouadkennedy2001/Wasel-calls" target="_blank" rel="noopener noreferrer" aria-label="نجوم المستودع على GitHub">
           <svg class="icon"><use href="#i-star"></use></svg>
           <span id="star-count">—</span>
         </a>
-        <button type="button" class="icon-btn nav-toggle" id="nav-toggle" aria-label="فتح القائمة" aria-expanded="false" aria-controls="primary-nav">
+        <button type="button" class="icon-btn nav-toggle" id="nav-toggle" data-en-aria="Open menu" aria-label="فتح القائمة" aria-expanded="false" aria-controls="primary-nav">
           <svg class="icon"><use href="#i-menu"></use></svg>
         </button>
       </div>
@@ -83,72 +116,74 @@
     <!-- 1) البداية -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero__glow" aria-hidden="true"></div>
+      <div class="hero__grid-pattern" aria-hidden="true"></div>
       <div class="shell hero__grid">
         <div class="hero__copy reveal">
-          <span class="eyebrow"><span class="pulse-dot"></span> يعمل على شبكتك المحلية — بلا إنترنت</span>
-          <h1 id="hero-title">تواصل مع من حولك،<br><span class="accent-text">حتى لو انقطع الإنترنت.</span></h1>
-          <p class="hero__lead">محادثات، مكالمات صوتية واضحة، ومشاركة ملفات على نفس الشبكة. بواجهة مستوحاة من GNOME وAdwaita: هادئة، سريعة، وجميلة على كل شاشة.</p>
+          <span class="eyebrow"><span class="pulse-dot"></span> <span data-en="Runs on your local network — no internet needed">يعمل على شبكتك المحلية — بلا إنترنت</span></span>
+          <h1 id="hero-title" data-en-html='Stay connected,<br><span class="accent-text">even when the internet is not.</span>'>تواصل مع من حولك،<br><span class="accent-text">حتى لو انقطع الإنترنت.</span></h1>
+          <p class="hero__lead" data-en="Chat, make crystal-clear voice calls and share files across the same network. A calm, fast GNOME-inspired interface that looks great on every screen.">محادثات، مكالمات صوتية واضحة، ومشاركة ملفات على نفس الشبكة. بواجهة مستوحاة من GNOME وAdwaita: هادئة، سريعة، وجميلة على كل شاشة.</p>
 
           <div class="hero__actions">
             <a class="btn btn--primary btn--lg" id="download-cta" href="https://github.com/mouadkennedy2001/Wasel-calls/releases/latest" target="_blank" rel="noopener noreferrer">
               <svg class="icon"><use href="#i-download"></use></svg>
-              <span id="download-label">تنزيل أحدث إصدار</span>
+              <span id="download-label" data-en="Download latest release">تنزيل أحدث إصدار</span>
             </a>
             <a class="btn btn--secondary btn--lg" href="#releases">
               <svg class="icon"><use href="#i-layers"></use></svg>
-              كل الإصدارات
+              <span data-en="All releases">كل الإصدارات</span>
             </a>
           </div>
 
           <div class="hero__meta">
-            <span class="pill pill--success" id="version-pill"><svg class="icon"><use href="#i-check"></use></svg> أحدث مستقر: v1.0.0</span>
+            <span class="pill pill--success" id="version-pill"><svg class="icon"><use href="#i-check"></use></svg> <span data-en="Latest stable: v1.0.0">أحدث مستقر: v1.0.0</span></span>
             <span class="hero__date"><svg class="icon"><use href="#i-clock"></use></svg> <span id="release-date">25 نوفمبر 2026</span></span>
           </div>
 
-          <dl class="stats" aria-label="إحصائيات المشروع">
-            <div class="stat"><dt>النجوم</dt><dd id="stat-stars">0</dd></div>
-            <div class="stat"><dt>التحميلات</dt><dd id="stat-downloads">0</dd></div>
-            <div class="stat"><dt>الإصدارات</dt><dd id="stat-releases">1</dd></div>
-            <div class="stat"><dt>المنصات</dt><dd>3</dd></div>
+          <dl class="stats" data-en-aria="Project statistics" aria-label="إحصائيات المشروع">
+            <div class="stat"><dt data-en="Stars">النجوم</dt><dd id="stat-stars">0</dd></div>
+            <div class="stat"><dt data-en="Downloads">التحميلات</dt><dd id="stat-downloads">0</dd></div>
+            <div class="stat"><dt data-en="Releases">الإصدارات</dt><dd id="stat-releases">1</dd></div>
+            <div class="stat"><dt data-en="Platforms">المنصات</dt><dd id="stat-platforms">3</dd></div>
           </dl>
         </div>
 
         <div class="hero__visual reveal" aria-hidden="true">
           <div class="app-window">
             <div class="window__header">
+              <img class="window__logo" src="icon.svg" alt="">
               <span class="window__dots"><i></i><i></i><i></i></span>
-              <span class="window__title">واصل كولز — غرفة العمل</span>
-              <span class="window__net"><i></i> متصل</span>
+              <span class="window__title" data-en="Wasel Calls — Team room">واصل كولز — غرفة العمل</span>
+              <span class="window__net"><i></i> <span data-en="Connected">متصل</span></span>
             </div>
             <div class="window__body">
               <aside class="window__sidebar">
-                <div class="window__profile"><span class="avatar avatar--me">أ</span><span><b>أحمد</b><small>متصل الآن</small></span></div>
-                <span class="window__nav is-active"><svg class="icon"><use href="#i-chat"></use></svg> المحادثة <em>3</em></span>
-                <span class="window__nav"><svg class="icon"><use href="#i-wave"></use></svg> المكالمات</span>
-                <span class="window__nav"><svg class="icon"><use href="#i-folder"></use></svg> الملفات</span>
-                <span class="window__nav"><svg class="icon"><use href="#i-radar"></use></svg> الشبكة</span>
-                <span class="window__nav"><svg class="icon"><use href="#i-palette"></use></svg> المظهر</span>
+                <div class="window__profile"><span class="avatar avatar--me">أ</span><span><b data-en="Ahmed">أحمد</b><small data-en="Online now">متصل الآن</small></span></div>
+                <span class="window__nav is-active"><svg class="icon"><use href="#i-chat"></use></svg> <span data-en="Chat">المحادثة</span> <em>3</em></span>
+                <span class="window__nav"><svg class="icon"><use href="#i-wave"></use></svg> <span data-en="Calls">المكالمات</span></span>
+                <span class="window__nav"><svg class="icon"><use href="#i-folder"></use></svg> <span data-en="Files">الملفات</span></span>
+                <span class="window__nav"><svg class="icon"><use href="#i-radar"></use></svg> <span data-en="Network">الشبكة</span></span>
+                <span class="window__nav"><svg class="icon"><use href="#i-palette"></use></svg> <span data-en="Appearance">المظهر</span></span>
               </aside>
               <div class="window__chat">
-                <div class="chat__head"><span class="avatar avatar--blue">م</span><span><b>محمد</b><small>يكتب الآن…</small></span><span class="chat__call"><svg class="icon"><use href="#i-wave"></use></svg></span></div>
+                <div class="chat__head"><span class="avatar avatar--blue">م</span><span><b data-en="Mohammed">محمد</b><small data-en="Typing now...">يكتب الآن…</small></span><span class="chat__call"><svg class="icon"><use href="#i-wave"></use></svg></span></div>
                 <div class="chat__msgs">
-                  <div class="bubble bubble--in">الملف وصلني، شكراً! الملف وصلني، شكراً!</div>
-                  <div class="bubble bubble--out">تمام، خذ نسخة محدثة 👌</div>
-                  <div class="file-card"><span class="file-card__icon"><svg class="icon"><use href="#i-folder"></use></svg></span><span><b>التقرير.pdf</b><small>2.4 MB · جاهز للتنزيل</small></span></div>
-                  <div class="bubble bubble--in">الصوت واضح جداً هذه المرة 🎙️</div>
+                  <div class="bubble bubble--in" data-en="Got the file, thanks!">الملف وصلني، شكراً!</div>
+                  <div class="bubble bubble--out" data-en="Perfect, here is the updated copy">تمام، خذ نسخة محدثة 👌</div>
+                  <div class="file-card"><span class="file-card__icon"><svg class="icon"><use href="#i-folder"></use></svg></span><span><b>report.pdf</b><small>2.4 MB · <span data-en="Ready to download">جاهز للتنزيل</span></small></span></div>
+                  <div class="bubble bubble--in" data-en="Audio is crystal clear this time">الصوت واضح جداً هذه المرة 🎙️</div>
                 </div>
-                <div class="chat__composer"><span>اكتب رسالة…</span><span class="send-btn"><svg class="icon"><use href="#i-arrow"></use></svg></span></div>
+                <div class="chat__composer"><span data-en="Write a message...">اكتب رسالة…</span><span class="send-btn"><svg class="icon"><use href="#i-arrow"></use></svg></span></div>
               </div>
             </div>
             <div class="window__voice">
-              <span class="voice__live"><i></i> مكالمة صوتية</span>
+              <span class="voice__live"><i></i> <span data-en="Voice call">مكالمة صوتية</span></span>
               <span class="waveform"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
               <span class="voice__time">02:41</span>
               <span class="voice__mute"><svg class="icon"><use href="#i-mic"></use></svg></span>
             </div>
           </div>
           <div class="float-chip float-chip--one"><svg class="icon"><use href="#i-radar"></use></svg> 192.168.1.24:7788</div>
-          <div class="float-chip float-chip--two"><svg class="icon"><use href="#i-shield"></use></svg> محلي بالكامل</div>
+          <div class="float-chip float-chip--two"><svg class="icon"><use href="#i-shield"></use></svg> <span data-en="100% local">محلي بالكامل</span></div>
         </div>
       </div>
     </section>
@@ -157,19 +192,19 @@
     <section class="section" id="features" aria-labelledby="features-title">
       <div class="shell">
         <div class="section__head reveal">
-          <span class="section__kicker">صغيرة في الحجم، كبيرة في العمل</span>
-          <h2 id="features-title">كل ما تحتاجه للتواصل في مكان واحد</h2>
-          <p>سبع أدوات أساسية، مصممة بعناية لتعمل معاً داخل شبكتك دون أي خدمة سحابية.</p>
+          <span class="section__kicker" data-en="Small in size, huge in capability">صغيرة في الحجم، كبيرة في العمل</span>
+          <h2 id="features-title" data-en="Everything you need to connect, in one place">كل ما تحتاجه للتواصل في مكان واحد</h2>
+          <p data-en="Eight carefully crafted tools that work together inside your own network, with no cloud service involved.">ثماني أدوات مصممة بعناية لتعمل معاً داخل شبكتك دون أي خدمة سحابية.</p>
         </div>
         <div class="feature-grid">
-          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-chat"></use></svg></span><h3>محادثات وغرف</h3><p>رسائل مباشرة وغرف محمية بكلمة مرور، مع مؤشر كتابة وسجل رسائل محفوظ على المضيف.</p></article>
-          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-wave"></use></svg></span><h3>مكالمات صوتية</h3><p>WebRTC لجودة أعلى، وبديل UDP PCM للتوافقية، مع تبديل تلقائي حسب الجهاز.</p></article>
-          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-folder"></use></svg></span><h3>مشاركة الملفات</h3><p>ملفات حتى 200MB، تقدم رفع، وروابط تنزيل مؤقتة لمدة ساعة مع حماية من العبث بالمسارات.</p></article>
-          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-radar"></use></svg></span><h3>اكتشاف تلقائي</h3><p>يعثر على الأجهزة عبر UDP Broadcast واسم الشبكة، أو أدخل عنوان IP يدوياً متى أردت.</p></article>
-          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-shield"></use></svg></span><h3>خصوصية محلية</h3><p>الحسابات والبيانات تبقى على جهازك، مع تشفير كلمات المرور وربط آمن بين الأجهزة.</p></article>
-          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-mic"></use></svg></span><h3>تحسين المايك microEV</h3><p>إلغاء صدى، تقليل ضوضاء، AGC، بوابة صوت VAD، وتحكم بالحساسية — محلياً وبلا خدمات خارجية.</p></article>
-          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-palette"></use></svg></span><h3>19 ثيمًا و RTL كامل</h3><p>Adwaita وYaru وNord وDracula وغيرها، مع وضع تلقائي حسب النظام وعربي/إنجليزي.</p></article>
-          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-backup"></use></svg></span><h3>نسخ احتياطي</h3><p>صدّر إعداداتك إلى JSON واستعدها على جهاز آخر بضغطة زر من الإعدادات.</p></article>
+          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-chat"></use></svg></span><h3 data-en="Chats and rooms">محادثات وغرف</h3><p data-en="Direct messages and password-protected rooms, with typing indicators and message history stored on the host.">رسائل مباشرة وغرف محمية بكلمة مرور، مع مؤشر كتابة وسجل رسائل محفوظ على المضيف.</p></article>
+          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-wave"></use></svg></span><h3 data-en="Voice calls">مكالمات صوتية</h3><p data-en="WebRTC for top quality and a UDP PCM fallback for compatibility, with automatic switching.">WebRTC لجودة أعلى، وبديل UDP PCM للتوافقية، مع تبديل تلقائي حسب الجهاز.</p></article>
+          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-folder"></use></svg></span><h3 data-en="File sharing">مشاركة الملفات</h3><p data-en="Files up to 200 MB, upload progress, one-hour download links and path-traversal protection.">ملفات حتى 200MB، تقدم رفع، وروابط تنزيل مؤقتة لمدة ساعة مع حماية من العبث بالمسارات.</p></article>
+          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-radar"></use></svg></span><h3 data-en="Auto discovery">اكتشاف تلقائي</h3><p data-en="Finds peers over UDP broadcast and Wi-Fi/Ethernet names, or enter an IP manually anytime.">يعثر على الأجهزة عبر UDP Broadcast واسم الشبكة، أو أدخل عنوان IP يدوياً متى أردت.</p></article>
+          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-shield"></use></svg></span><h3 data-en="Local privacy">خصوصية محلية</h3><p data-en="Accounts and data stay on your machine, with hashed passwords and secure peer connections.">الحسابات والبيانات تبقى على جهازك، مع تشفير كلمات المرور وربط آمن بين الأجهزة.</p></article>
+          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-mic"></use></svg></span><h3 data-en="microEV voice tuning">تحسين المايك microEV</h3><p data-en="Echo cancellation, noise reduction, AGC, VAD gate and sensitivity control — all processed locally.">إلغاء صدى، تقليل ضوضاء، AGC، بوابة صوت VAD، وتحكم بالحساسية — محلياً وبلا خدمات خارجية.</p></article>
+          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-palette"></use></svg></span><h3 data-en="19 themes and full RTL">19 ثيمًا و RTL كامل</h3><p data-en="Adwaita, Yaru, Nord, Dracula and more, with system-follow mode and Arabic/English interfaces.">Adwaita وYaru وNord وDracula وغيرها، مع وضع تلقائي حسب النظام وعربي/إنجليزي.</p></article>
+          <article class="feature-card reveal"><span class="feature-card__icon"><svg class="icon"><use href="#i-backup"></use></svg></span><h3 data-en="Settings backup">نسخ احتياطي</h3><p data-en="Export your settings to JSON and restore them on another device from the settings panel.">صدّر إعداداتك إلى JSON واستعدها على جهاز آخر بضغطة زر من الإعدادات.</p></article>
         </div>
       </div>
     </section>
@@ -178,41 +213,47 @@
     <section class="section section--muted" id="platforms" aria-labelledby="platforms-title">
       <div class="shell">
         <div class="section__head reveal">
-          <span class="section__kicker">تصميم متجاوب بلا استثناءات</span>
-          <h2 id="platforms-title">من الجوال إلى شاشة سطح المكتب</h2>
-          <p>واجهة واحدة تتكيف مع كل حجم، ومسارات تثبيت تناسب كل منصة.</p>
+          <span class="section__kicker" data-en="Responsive down to the last pixel">تصميم متجاوب بلا استثناءات</span>
+          <h2 id="platforms-title" data-en="From your phone to your desktop">من الجوال إلى شاشة سطح المكتب</h2>
+          <p data-en="One interface that adapts to every size, with installation paths for every platform.">واجهة واحدة تتكيف مع كل حجم، ومسارات تثبيت تناسب كل منصة.</p>
         </div>
 
         <div class="platform-grid">
           <article class="platform-card reveal">
             <span class="platform-card__icon"><svg class="icon"><use href="#i-android"></use></svg></span>
-            <h3>أندرويد</h3>
-            <p>ملف APK جاهز من صفحة الإصدارات. يعمل على أندرويد 7.0 فأعلى (API 24) عبر Capacitor.</p>
-            <a href="#releases" class="text-link">حمّل APK <svg class="icon"><use href="#i-arrow"></use></svg></a>
+            <h3 data-en="Android">أندرويد</h3>
+            <p data-en-html='A ready APK from the releases page. Runs on Android 7.0+ (API 24) via <code>Capacitor</code>.'>ملف APK جاهز من صفحة الإصدارات. يعمل على أندرويد 7.0 فأعلى (API 24) عبر Capacitor.</p>
+            <a href="#releases" class="text-link"><span data-en="Get the APK">حمّل APK</span> <svg class="icon"><use href="#i-arrow"></use></svg></a>
           </article>
           <article class="platform-card reveal">
             <span class="platform-card__icon"><svg class="icon"><use href="#i-desktop"></use></svg></span>
-            <h3>ويندوز وLinux وmacOS</h3>
-            <p>تطبيق سطح مكتب عبر Electron: سيرفر مدمج، اختصارات، وإمكانية تصغير إلى شريط النظام.</p>
-            <a href="https://github.com/mouadkennedy2001/Wasel-calls#%D8%A7%D9%84%D8%AA%D8%B4%D8%BA%D9%8A%D9%84-%D8%A7%D9%84%D8%B3%D8%B1%D9%8A%D8%B9" class="text-link" target="_blank" rel="noopener noreferrer">طريقة البناء <svg class="icon"><use href="#i-arrow"></use></svg></a>
+            <h3 data-en="Windows, Linux and macOS">ويندوز وLinux وmacOS</h3>
+            <p data-en="A desktop app built with Electron: embedded server, keyboard shortcuts and minimize-to-tray support.">تطبيق سطح مكتب عبر Electron: سيرفر مدمج، اختصارات، وإمكانية تصغير إلى شريط النظام.</p>
+            <a href="https://github.com/mouadkennedy2001/Wasel-calls#%D8%A7%D9%84%D8%AA%D8%B4%D8%BA%D9%8A%D9%84-%D8%A7%D9%84%D8%B3%D8%B1%D9%8A%D8%B9" class="text-link" target="_blank" rel="noopener noreferrer"><span data-en="Build instructions">طريقة البناء</span> <svg class="icon"><use href="#i-arrow"></use></svg></a>
           </article>
           <article class="platform-card reveal">
             <span class="platform-card__icon"><svg class="icon"><use href="#i-browser"></use></svg></span>
-            <h3>أي متصفح على الشبكة</h3>
-            <p>افتح <code>http://IP-المضيف:7788</code> من أي جهاز على نفس Wi-Fi أو Ethernet — لا تثبيت مطلوب.</p>
-            <a href="#guide" class="text-link">دليل الاتصال <svg class="icon"><use href="#i-arrow"></use></svg></a>
+            <h3 data-en="Any browser on the LAN">أي متصفح على الشبكة</h3>
+            <p data-en-html='Open <code>http://HOST-IP:7788</code> from any device on the same Wi-Fi or Ethernet. Nothing to install.'>افتح <code>http://IP-المضيف:7788</code> من أي جهاز على نفس Wi-Fi أو Ethernet — لا تثبيت مطلوب.</p>
+            <a href="#guide" class="text-link"><span data-en="Connection guide">دليل الاتصال</span> <svg class="icon"><use href="#i-arrow"></use></svg></a>
           </article>
         </div>
 
-        <div class="screen-bar reveal" aria-label="أحجام الشاشات المدعومة">
-          <div class="screen-bar__label"><svg class="icon"><use href="#i-layers"></use></svg> مدعو على كل مقاس</div>
+        <div class="screen-bar reveal" data-en-aria="Supported screen sizes" aria-label="أحجام الشاشات المدعومة">
+          <div class="screen-bar__label"><svg class="icon"><use href="#i-layers"></use></svg> <span data-en="Looks right at every size">مدعو على كل مقاس</span></div>
           <div class="screen-bar__items">
-            <span><b>360px</b><small>جوال صغير</small></span>
-            <span><b>390px</b><small>جوال</small></span>
-            <span><b>820px</b><small>تابلت</small></span>
-            <span><b>1024px</b><small>لابتوب</small></span>
-            <span><b>1500px+</b><small>سطح مكتب</small></span>
+            <span><b>360px</b><small data-en="Small phone">جوال صغير</small></span>
+            <span><b>390px</b><small data-en="Phone">جوال</small></span>
+            <span><b>820px</b><small data-en="Tablet">تابلت</small></span>
+            <span><b>1024px</b><small data-en="Laptop">لابتوب</small></span>
+            <span><b>1500px+</b><small data-en="Desktop">سطح مكتب</small></span>
           </div>
+        </div>
+
+        <div class="ports-strip reveal">
+          <span><svg class="icon"><use href="#i-lock"></use></svg> <b>7788</b> <small data-en="HTTP + WebSocket + files">HTTP + WebSocket + ملفات</small></span>
+          <span><svg class="icon"><use href="#i-radar"></use></svg> <b>7789</b> <small data-en="UDP discovery">اكتشاف UDP</small></span>
+          <span><svg class="icon"><use href="#i-wave"></use></svg> <b>7790</b> <small data-en="Optional UDP relay">ترحيل صوت اختياري</small></span>
         </div>
       </div>
     </section>
@@ -221,35 +262,46 @@
     <section class="section" id="releases" aria-labelledby="releases-title">
       <div class="shell">
         <div class="section__head reveal">
-          <span class="section__kicker">تحديثات شفافة ومباشرة</span>
-          <h2 id="releases-title">الإصدارات وملفات التحميل</h2>
-          <p>يُجلب أحدث إصدار <strong>مستقر</strong> تلقائياً من GitHub API ويُثبّت في الأعلى، مع كل الإصدارات السابقة وملفاتها.</p>
+          <span class="section__kicker" data-en="Transparent updates, straight from the source">تحديثات شفافة ومباشرة</span>
+          <h2 id="releases-title" data-en="Releases and downloads">الإصدارات وملفات التحميل</h2>
+          <p data-en-html='The newest <strong>stable</strong> release is pinned automatically from the GitHub API, with every earlier build and its files below.'>يُجلب أحدث إصدار <strong>مستقر</strong> تلقائياً من GitHub API ويُثبّت في الأعلى، مع كل الإصدارات السابقة وملفاتها.</p>
           <span class="sync-note" id="sync-note" role="status"><span class="pulse-dot"></span> جارٍ مزامنة الإصدارات…</span>
+        </div>
+
+        <div class="release-toolbar reveal">
+          <label class="search-field">
+            <svg class="icon"><use href="#i-search"></use></svg>
+            <input type="search" id="release-filter" placeholder="ابحث في الإصدارات..." data-en-placeholder="Search releases..." aria-label="ابحث في الإصدارات" data-en-aria="Search releases">
+          </label>
+          <a class="text-link" href="https://github.com/mouadkennedy2001/Wasel-calls/releases" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-github"></use></svg> <span data-en="Open on GitHub">افتح على GitHub</span></a>
         </div>
 
         <div id="latest-release" class="release-card release-card--latest reveal" aria-live="polite">
           <div class="release-card__head">
             <div>
-              <span class="pill pill--success"><svg class="icon"><use href="#i-check"></use></svg> أحدث مستقر</span>
+              <span class="pill pill--success"><svg class="icon"><use href="#i-check"></use></svg> <span data-en="Latest stable">أحدث مستقر</span></span>
               <h3>v1.0.0 <small>— 25 نوفمبر 2026</small></h3>
+              <span class="release-card__age" id="release-age"></span>
             </div>
-            <a class="btn btn--primary" href="https://github.com/mouadkennedy2001/Wasel-calls/releases/download/v1.0.0/Wasel-calls.apk" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-download"></use></svg> تنزيل APK</a>
+            <a class="btn btn--primary" href="https://github.com/mouadkennedy2001/Wasel-calls/releases/download/v1.0.0/Wasel-calls.apk" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-download"></use></svg> <span data-en="Open release page">صفحة التحميل</span></a>
           </div>
-          <p class="release-card__notes">1st version — APK الأول بحجم 3.8 MB، مع بصمة SHA256 للتحقق.</p>
-          <div class="asset-row">
-            <span class="asset-row__icon"><svg class="icon"><use href="#i-android"></use></svg></span>
-            <span class="asset-row__name"><b>Wasel-calls.apk</b><small>3.8 MB · 0 تحميل</small></span>
-            <button type="button" class="copy-btn" data-copy="fc392ede78d9aa56db855eb758e6e01fc918ddb09b6f6b0c273b49fc8d08fb53" title="نسخ بصمة SHA256"><svg class="icon"><use href="#i-copy"></use></svg> SHA256</button>
-            <a class="icon-btn icon-btn--link" href="https://github.com/mouadkennedy2001/Wasel-calls/releases/download/v1.0.0/Wasel-calls.apk" target="_blank" rel="noopener noreferrer" aria-label="تنزيل Wasel-calls.apk"><svg class="icon"><use href="#i-download"></use></svg></a>
+          <p class="release-card__notes">1st version — <span data-en="The first APK, 3.8 MB, with a SHA256 checksum for verification.">APK الأول بحجم 3.8 MB، مع بصمة SHA256 للتحقق.</span></p>
+          <div class="asset-list">
+            <div class="asset-row">
+              <span class="asset-row__icon"><svg class="icon"><use href="#i-android"></use></svg></span>
+              <span class="asset-row__name"><b>Wasel-calls.apk</b><small>3.8 MB · 0 <span data-en="downloads">تحميل</span> · SHA256: fc392ede78d…b53</small></span>
+              <button type="button" class="copy-btn" data-copy="fc392ede78d9aa56db855eb758e6e01fc918ddb09b6f6b0c273b49fc8d08fb53" title="SHA256"><svg class="icon"><use href="#i-copy"></use></svg> SHA256</button>
+              <a class="icon-btn icon-btn--link" href="https://github.com/mouadkennedy2001/Wasel-calls/releases/download/v1.0.0/Wasel-calls.apk" target="_blank" rel="noopener noreferrer" aria-label="Download Wasel-calls.apk"><svg class="icon"><use href="#i-download"></use></svg></a>
+            </div>
           </div>
         </div>
 
         <details class="older-releases reveal" id="older-releases">
-          <summary><span>الإصدارات السابقة والنسخ التجريبية</span><span class="summary-count" id="older-count">0</span></summary>
+          <summary><span data-en="Previous releases and pre-releases">الإصدارات السابقة والنسخ التجريبية</span><span class="summary-count" id="older-count">0</span></summary>
           <div class="older-releases__list" id="older-list"></div>
         </details>
 
-        <noscript><p class="notice">البيانات المعروضة هي آخر إصدار معروف؛ فعّل JavaScript لتحديث الأرقام والإصدارات تلقائياً من GitHub.</p></noscript>
+        <noscript><p class="notice" data-en="Showing the last known release. Enable JavaScript for live release and star data from GitHub.">البيانات المعروضة هي آخر إصدار معروف؛ فعّل JavaScript لتحديث الأرقام والإصدارات تلقائياً من GitHub.</p></noscript>
       </div>
     </section>
 
@@ -257,14 +309,14 @@
     <section class="section section--muted" id="guide" aria-labelledby="guide-title">
       <div class="shell">
         <div class="section__head reveal">
-          <span class="section__kicker">ابدأ خلال دقيقتين</span>
-          <h2 id="guide-title">ثلاث خطوات للتواصل</h2>
-          <p>جهاز واحد يشغّل السيرفر، وبقية الأجهزة تنضم إليه على نفس الشبكة.</p>
+          <span class="section__kicker" data-en="Up and running in two minutes">ابدأ خلال دقيقتين</span>
+          <h2 id="guide-title" data-en="Three steps to connect">ثلاث خطوات للتواصل</h2>
+          <p data-en="One device runs the server, and every other device joins it on the same network.">جهاز واحد يشغّل السيرفر، وبقية الأجهزة تنضم إليه على نفس الشبكة.</p>
         </div>
         <div class="steps">
-          <article class="step reveal"><span class="step__num">01</span><h3>شغّل واصل</h3><p>على الحاسوب المضيف، ابدأ السيرفر أو افتح تطبيق سطح المكتب.</p><div class="code-block"><code>npm install &amp;&amp; npm start</code><button type="button" class="copy-btn copy-btn--icon" data-copy="npm install &amp;&amp; npm start" aria-label="نسخ الأمر"><svg class="icon"><use href="#i-copy"></use></svg></button></div></article>
-          <article class="step reveal"><span class="step__num">02</span><h3>اعرف عنوان المضيف</h3><p>من قسم «الشبكة» يظهر عنوان الجهاز، أو أدخله يدوياً مثل <code>10.0.0.5:7788</code>.</p><span class="step__tip"><svg class="icon"><use href="#i-offline"></use></svg> المنفذ الافتراضي 7788 · الاكتشاف 7789</span></article>
-          <article class="step reveal"><span class="step__num">03</span><h3>انضم من أي جهاز</h3><p>افتح الرابط في المتصفح أو التطبيق، أنشئ حساباً محلياً، وابدأ المحادثة أو المكالمة.</p><div class="code-block"><code>http://&lt;IP-المضيف&gt;:7788</code><button type="button" class="copy-btn copy-btn--icon" data-copy="http://<IP-المضيف>:7788" aria-label="نسخ العنوان"><svg class="icon"><use href="#i-copy"></use></svg></button></div></article>
+          <article class="step reveal"><span class="step__num">01</span><h3 data-en="Start Wasel">شغّل واصل</h3><p data-en-html='On the host computer, start the server or launch the desktop app with <code>npm start</code>.'>على الحاسوب المضيف، ابدأ السيرفر أو افتح تطبيق سطح المكتب.</p><div class="code-block"><code>npm install &amp;&amp; npm start</code><button type="button" class="copy-btn copy-btn--icon" data-copy="npm install &amp;&amp; npm start" data-en-aria="Copy command" aria-label="نسخ الأمر"><svg class="icon"><use href="#i-copy"></use></svg></button></div></article>
+          <article class="step reveal"><span class="step__num">02</span><h3 data-en="Find the host address">اعرف عنوان المضيف</h3><p data-en-html='The Network tab shows the host address, or enter it manually like <code>10.0.0.5:7788</code>.'>من قسم «الشبكة» يظهر عنوان الجهاز، أو أدخله يدوياً مثل <code>10.0.0.5:7788</code>.</p><span class="step__tip"><svg class="icon"><use href="#i-offline"></use></svg> <span data-en="Default port 7788 · discovery 7789">المنفذ الافتراضي 7788 · الاكتشاف 7789</span></span></article>
+          <article class="step reveal"><span class="step__num">03</span><h3 data-en="Join from any device">انضم من أي جهاز</h3><p data-en="Open the address in a browser or the app, create a local account, then start chatting or calling.">افتح الرابط في المتصفح أو التطبيق، أنشئ حساباً محلياً، وابدأ المحادثة أو المكالمة.</p><div class="code-block"><code>http://&lt;HOST-IP&gt;:7788</code><button type="button" class="copy-btn copy-btn--icon" data-copy="http://&lt;HOST-IP&gt;:7788" data-en-aria="Copy address" aria-label="نسخ العنوان"><svg class="icon"><use href="#i-copy"></use></svg></button></div></article>
         </div>
       </div>
     </section>
@@ -273,15 +325,15 @@
     <section class="section" id="faq" aria-labelledby="faq-title">
       <div class="shell shell--narrow">
         <div class="section__head reveal">
-          <span class="section__kicker">أسئلة متكررة</span>
-          <h2 id="faq-title">قبل أن تبدأ</h2>
+          <span class="section__kicker" data-en="Common questions">أسئلة متكررة</span>
+          <h2 id="faq-title" data-en="Before you start">قبل أن تبدأ</h2>
         </div>
         <div class="faq-list reveal">
-          <details><summary>هل يحتاج التطبيق إلى إنترنت؟</summary><p>لا. المحادثات والمكالمات ومشاركة الملفات تعبر الشبكة المحلية مباشرة (Wi-Fi أو Ethernet). لا يوجد أي اعتماد على خادم سحابي.</p></details>
-          <details><summary>كيف أجد الأجهزة الأخرى؟</summary><p>يفتتح التطبيق اكتشافاً عبر UDP Broadcast، ويعرض اسم شبكة الاتصال. إن لم يظهر جهاز ما، افتح قسم «الشبكة» وأدخل عنوان IP الخاص به يدوياً.</p></details>
-          <details><summary>ما الفرق بين WebRTC وUDP PCM؟</summary><p>WebRTC يعطي جودة صوت أفضل وميزات مثل إلغاء الصدى، بينما UDP PCM بديل أبسط يعمل في بيئات لا تدعم WebRTC بالكامل. يمكنك الاختيار أو ترك الوضع تلقائياً.</p></details>
-          <details><summary>هل الملفات تبقى على الجهاز؟</summary><p>نعم. تُخزّن الملفات على جهاز المضيف، وتُنشأ روابط تنزيل صالحة لمدة ساعة فقط، مع تحقق من أسماء الملفات لمنع الوصول إلى مسارات خارج المجلد المخصص.</p></details>
-          <details><summary>كيف أعرف أنني أحدث إصدار؟</summary><p>هذه الصفحة تجلب قائمة الإصدارات من GitHub API وتستبعد النسخ التجريبية والمسودات، ثم تثبّت أعلى إصدار مستقر تلقائياً. يمكنك أيضاً الاشتراك في إشعارات Releases على GitHub.</p></details>
+          <details><summary data-en="Does the app need internet?">هل يحتاج التطبيق إلى إنترنت؟</summary><p data-en="No. Chats, calls and file sharing travel over your local Wi-Fi or Ethernet network. There is no cloud dependency.">لا. المحادثات والمكالمات ومشاركة الملفات تعبر الشبكة المحلية مباشرة (Wi-Fi أو Ethernet). لا يوجد أي اعتماد على خادم سحابي.</p></details>
+          <details><summary data-en="How do I find other devices?">كيف أجد الأجهزة الأخرى؟</summary><p data-en="The app discovers peers over UDP broadcast and shows your network name. If a device does not appear, open Network and enter its IP manually.">يفتتح التطبيق اكتشافاً عبر UDP Broadcast، ويعرض اسم شبكة الاتصال. إن لم يظهر جهاز ما، افتح قسم «الشبكة» وأدخل عنوان IP الخاص به يدوياً.</p></details>
+          <details><summary data-en="WebRTC or UDP PCM?">ما الفرق بين WebRTC وUDP PCM؟</summary><p data-en="WebRTC gives better audio quality and echo cancellation; UDP PCM is a simpler fallback for restricted environments. You can pick one or leave it automatic.">WebRTC يعطي جودة صوت أفضل وميزات مثل إلغاء الصدى، بينما UDP PCM بديل أبسط يعمل في بيئات لا تدعم WebRTC بالكامل. يمكنك الاختيار أو ترك الوضع تلقائياً.</p></details>
+          <details><summary data-en="Do files stay on my machine?">هل الملفات تبقى على الجهاز؟</summary><p data-en="Yes. Files live on the host device, download links expire after one hour, and filenames are validated to prevent path traversal.">نعم. تُخزّن الملفات على جهاز المضيف، وتُنشأ روابط تنزيل صالحة لمدة ساعة فقط، مع تحقق من أسماء الملفات لمنع الوصول إلى مسارات خارج المجلد المخصص.</p></details>
+          <details><summary data-en="How do I know I am up to date?">كيف أعرف أنني أحدث إصدار؟</summary><p data-en="This page reads the release list from the GitHub API, skips drafts and pre-releases, and pins the highest stable version automatically. You can also subscribe to release notifications on GitHub.">هذه الصفحة تجلب قائمة الإصدارات من GitHub API وتستبعد النسخ التجريبية والمسودات، ثم تثبّت أعلى إصدار مستقر تلقائياً. يمكنك أيضاً الاشتراك في إشعارات Releases على GitHub.</p></details>
         </div>
       </div>
     </section>
@@ -289,8 +341,8 @@
     <!-- 7) دعوة أخيرة -->
     <section class="cta-band">
       <div class="shell cta-band__inner reveal">
-        <div><h2>جاهز للتواصل؟</h2><p>حمّل النسخة المناسبة لجهازك، أو شغّل السيرفر من المصدر خلال ثوانٍ.</p></div>
-        <a class="btn btn--primary btn--lg" href="#releases"><svg class="icon"><use href="#i-download"></use></svg> انتقل إلى التحميل</a>
+        <div><h2 data-en="Ready to connect?">جاهز للتواصل؟</h2><p data-en="Grab the build for your device, or start the server from source in seconds.">حمّل النسخة المناسبة لجهازك، أو شغّل السيرفر من المصدر خلال ثوانٍ.</p></div>
+        <a class="btn btn--primary btn--lg" href="#releases"><svg class="icon"><use href="#i-download"></use></svg> <span data-en="Go to downloads">انتقل إلى التحميل</span></a>
       </div>
     </section>
   </main>
@@ -298,18 +350,27 @@
   <footer class="footer">
     <div class="shell footer__inner">
       <div class="footer__brand">
-        <span class="brand__mark brand__mark--small"><svg class="icon"><use href="#i-wasel"></use></svg></span>
-        <div><b>واصل كولز</b><small>تواصل محلي بأسلوب GNOME</small></div>
+        <img class="footer__logo" src="icon.svg" alt="">
+        <div><b data-en="Wasel Calls">واصل كولز</b><small data-en="Local-first communication, GNOME style">تواصل محلي بأسلوب GNOME</small></div>
       </div>
-      <nav class="footer__links" aria-label="روابط المشروع">
-        <a href="https://github.com/mouadkennedy2001/Wasel-calls" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-github"></use></svg> المستودع</a>
-        <a href="https://github.com/mouadkennedy2001/Wasel-calls/releases" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-layers"></use></svg> الإصدارات</a>
-        <a href="https://github.com/mouadkennedy2001/Wasel-calls/issues" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-heart"></use></svg> المساهمة</a>
+      <nav class="footer__links" data-en-aria="Project links" aria-label="روابط المشروع">
+        <a href="https://github.com/mouadkennedy2001/Wasel-calls" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-github"></use></svg> <span data-en="Repository">المستودع</span></a>
+        <a href="https://github.com/mouadkennedy2001/Wasel-calls/releases" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-layers"></use></svg> <span data-en="Releases">الإصدارات</span></a>
+        <a href="https://github.com/mouadkennedy2001/Wasel-calls/issues" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-heart"></use></svg> <span data-en="Contribute">المساهمة</span></a>
       </nav>
-      <p class="footer__copy">مرخّص تحت <b>MIT</b> · صُنع بـ <svg class="icon"><use href="#i-heart"></use></svg> للعمل بلا إنترنت</p>
+      <div class="maker-card">
+        <img src="icon.svg" alt="" class="maker-card__logo">
+        <div>
+          <small data-en="Made by">صُنع بواسطة</small>
+          <strong>zerouki ahmed mouad</strong>
+          <span>زروقي أحمد معاذ</span>
+        </div>
+      </div>
+      <p class="footer__copy"><span data-en="Licensed under">مرخّص تحت</span> <b>MIT</b> · <span data-en="built for offline communication">صُنع للتواصل بلا إنترنت</span></p>
     </div>
   </footer>
 
+  <button type="button" class="to-top" id="to-top" data-en-aria="Back to top" aria-label="العودة إلى الأعلى"><svg class="icon"><use href="#i-up"></use></svg></button>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
